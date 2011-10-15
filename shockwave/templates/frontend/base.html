@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<title>{% block title %}Shockwave{% endblock %}</title>
+	
+	<link rel="stylesheet" href="/media/normalise.css" />
+	<link rel="stylesheet" href="/media/style.css" />
+	{% block stylesheets %}
+	{% endblock %}
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+	{% block scripts %}
+	{% endblock %}
+	
+	
+</head>
+<body>
+	<div id="container">
+		{% block titlebar %}
+		<header id="titlebar">
+			<div id="titlebar_left">{% block titlebar_left %}{% endblock %}</div>
+			<div id="titlebar_right">{% block titlebar_right %}{% endblock %}</div>
+		</header>	
+		{% endblock %}
+		
+		<div id="content">
+		{% block content %}
+		{% endblock %}
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+#titlebar {
+	background-color:#d1d1d1;
+	height:44px;
+}
+
+#titlebar_left,
+#titlebar_right {
+	line-height:32px;
+	font-size:12pt;
+	margin: 6px 20px;
+}
+
+#titlebar_left {
+	float:left;
+}
+
+#titlebar_right {
+	float:right;
+}
