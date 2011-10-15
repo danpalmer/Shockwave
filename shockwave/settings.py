@@ -93,7 +93,15 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    
+    'frontend',
+    'api',
 )
+
+# Authorisation
+TWITTER_CONSUMER_KEY = "q4XHXUEYXUvweBPeU1zg"
+TWITTER_CONSUMER_SECRET = "6YMcriFzY5hDOrrLAqllPXC0WJM0KLdvefwkCnGU"
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
