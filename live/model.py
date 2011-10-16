@@ -24,3 +24,4 @@ class DataPoint():
 					   "time":str(time.mktime(self.time.timetuple()))
 			   }
 			return json.dumps(x)
+

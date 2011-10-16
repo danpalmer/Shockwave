@@ -1,5 +1,6 @@
 $(document).ready(function(){initialize();});
 var datamarkerlist= new Array();
+var IMAGE_FADE_MULTIPLIER = 0.5;
 
 function DataMarker(message, latlng, timestamp) {
 	 this.latlng = latlng;
@@ -121,10 +122,15 @@ function fitMapToMarkers() {
 function search(searchText) {
 	$("#titlebar_left").html(searchText);
 	
+	$.each(datamarkerlist, function(index, object) {
+		object.marker.setMap(null);
+	});
+	datamarkerlist = [];
+	
 	var searchurl = "/info/" + searchText;
 	$.get(searchurl, function(data) {
 		var info = $.parseJSON(data);
-		if(info.isStream == false) {
+		if(info.stream == "false") {
 			getBatchData(info.url);
 		} else {
 			getStreamData(info.url);
@@ -142,22 +148,14 @@ function getStreamData(url) {
 }
 
 function getBatchData(url) {
-
-
+	$.get("/dataset/glastonbury-2011", function(data) {
+		$.each(data, function(index, object) {
+			var datamarker = new DataMarker(object.content, new google.maps.LatLng(object.latitude, object.longitude), object.time);
+		});
+		reset_slider();
+	});
 }
 
-/*
-function addMarker(tweetmarker) {
-
-	marker = new google.maps.Marker({position: tweetmarker.pos,
-					 map : map,
-					 title: tweetmarker.message
-					});
-	data.marker = marker;	
-	tweetmarkerlist.push(tweetmarker);
-
-}
-*/
 function updateView() {
 
 	for( var b = 0; b < tweetmarkerlist.length; b++) {
@@ -207,6 +205,7 @@ function initialize_slider() {
 		change: function(event, ui) {
 			$.each(datamarkerlist, function(index, value) {
 					
+					changeMarkerTransparency(datamarkerlist[index], ui.value + parseInt(getMinTimestamp()), getMaxTimestamp() - getMinTimestamp());
 				if (value.timestamp <= ui.value + parseInt(current_min_timestamp)) {
 					value.marker.setVisible(true)
 				} else {
@@ -223,17 +222,48 @@ function initialize_slider() {
 
 function changeMarkerTransparency(datamarker, current_timestamp, timeRange) {
 
-	console.log("the marker timestamp is %d", datamarker.timestamp);
-	console.log("the UI timestamp is %d", current_timestamp);
-	console.log("the timeRang is %d", timeRange);
-	console.log("the UI timestamp minus the timeRange is %d", current_timestamp - timeRange);
+	//console.log("the marker timestamp is %d", datamarker.timestamp);
+	//console.log("the UI timestamp is %d", current_timestamp);
+	//console.log("the timeRang is %d", timeRange);
+	//console.log("the UI timestamp minus the timeRange is %d", current_timestamp - timeRange);
+	//console.log("the datamarker minus (the ui timestamp - the timerange)", datamarker.timestamp - (current_timestamp - timeRange));
 	
-	var alpha = getAlpha(datamarker.timestamp, current_timestamp, timeRange);	
+	var alpha = getAlpha(datamarker.timestamp, current_timestamp, timeRange*IMAGE_FADE_MULTIPLIER);	
+	//console.log("alpha for datamarker is %d", alpha);
+	//datamarker.marker.setTitle(alpha);
+
+	for(var b = 1.0; b < 9.0; b=b + 1.0) {
+		var max = b /  8.0;
+		var min= (b / 8.0) - (1.0 / 8.0);
+		if( alpha < max) {
+			if(alpha > min) {
+				datamarker.marker.setIcon("/media/images/TrackingDot" + (8 - b) + ".png");
+
+			}
+
+		}
+		
+		
+
+	}
 
 }
 
 function getAlpha(some_timestamp, current_timestamp, timeRange) {
 
+		var zerotime = current_timestamp - timeRange;
+		var v = some_timestamp - zerotime;
+		if (v >= timeRange) {
+			return 0.0;
+		}
+
+		if (v <= 0) {
+			return 1.0;
+
+		}
+		//console.log("v divided by timerang is %d", v / timeRange);
+		//console.log("v is %d", v);
+		return (v / timeRange);
 
 }
 
@@ -285,7 +315,7 @@ function play() {
 	var difference = max_timestamp - min_timestamp;
 	date_increase_amount = difference / play_length;
 	
-	setInterval("next_play_stage()", 1000);
+	setInterval("next_play_stage()", 100);
 }
 
 function next_play_stage() {
