@@ -1,0 +1,1 @@
+[{% autoescape off %}{% for datapoint in data %}{% if datapoint.json %}{{datapoint.json}},{% endif %}{% endfor %}{% endautoescape %}]
