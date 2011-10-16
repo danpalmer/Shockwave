@@ -226,7 +226,8 @@ function changeMarkerTransparency(datamarker, current_timestamp, timeRange) {
 	console.log("the marker timestamp is %d", datamarker.timestamp);
 	console.log("the UI timestamp is %d", current_timestamp);
 	console.log("the timeRang is %d", timeRange);
-	console.log("the UI timestamp minus the timeRange is %d", current_timestamp
+	console.log("the UI timestamp minus the timeRange is %d", current_timestamp - timeRange);
+	
 	var alpha = getAlpha(datamarker.timestamp, current_timestamp, timeRange);	
 
 }
