@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WebSockets Hello World</title>
+    <meta charset="utf-8" />
+    <style type="text/css">
+      body {
+				font-family: "Helvetica Neue", "MS Trebuchet", sans-serif;
+        text-align: center;
+        min-width: 500px;
+      }
+
+			#content-holder {
+				background-color: yellow;
+				text-align: left;
+			}
+			
+			#closed {
+				background-color: red;
+			}
+    </style>
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        var ws;
+
+        $("#open").click(function(evt) {
+          evt.preventDefault();
+
+					// host: localhost
+					// port: depends on how server is initialised
+					// uri: keyword to track
+          var host = $("#host").val();
+          var port = $("#port").val();
+          var uri = $("#uri").val();
+
+					// create new websocket connection
+          ws = new WebSocket("ws://" + host + ":" + port + uri);
+
+					// called every time a message is received
+          ws.onmessage = function(event) {
+						// SAMPLE: append an <li> with the contents
+						$('ul#content').append('<li>' + event.data + '</li>');
+					};
+
+					// called when server connection closes
+          ws.onclose = function(event) { 
+						// SAMPLE: append a div saying connection closed
+						$('content-holder').append('<div id="closed"><b>The server has disconnected you.</b></div>');
+					};
+
+					// called when server connection opened
+          ws.onopen = function(evt) { 
+						// SAMPLE: recolour login detail textboxes green
+            $("#host").css("background", "green"); 
+            $("#port").css("background", "green"); 
+            $("#uri").css("background", "green");
+
+						$('#content-holder').css('opacity: 1.0');
+          };
+
+					$('#disconnect').click(function(){  
+					    ws.close();
+					});
+        });
+
+      });
+    </script>
+  </head>
+
+  <body>
+    <h1>Shockwave TEST</h1>
+    <div>
+			<h4>Enter server details</h4>
+      <label for="host">Host:</label>
+      	<input type="text" id="host" value="localhost" style="background:red;"/><br />
+      <label for="port">Port:</label>
+      	<input type="text" id="port" value="9999" style="background:red;"/><br />
+      <label for="uri">URI:</label>
+      	<input type="text" id="uri" value="/ws" style="background:red;"/><br />
+      
+				<input type="submit" id="open" value="open" />
+    </div>
+
+		<div id="content-holder">
+			<button id="disconnect">Disconnect from Server</button> 
+			<ul id="content">
+				
+			</ul>
+		</div>
+  </body>
+</html>

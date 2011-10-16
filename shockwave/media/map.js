@@ -168,8 +168,6 @@ function getStreamData(url) {
 
             $('#content-holder').css('opacity: 1.0');
     };
-
-}
 }
 
 function getBatchData(url) {
