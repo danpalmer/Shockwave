@@ -3,14 +3,19 @@
 {% block titlebar_left %}Shockwave{% endblock %}
 {% block titlebar_right %}
 	<form  id="searchform" action="">
-		<input id="search" type="text" name="Search" />
-		
-		<input type="submit" value="Search"/>
+		<input type="submit" class="action_button search_button" style="float:right;" value="Search"/>
+		<input id="search" type="text" style="float:right;margin-top:4px;" name="Search" />
 	</form>
 {% endblock %}
 
 {% block content %}
 	<div id="map" style="width:100%; height:100%; overflow: visible"></div>
+	
+	<div id="slider_container">
+		<div id="slider" class="slider"></div>
+		<div id="play_button" class="action_button" onclick="play()">Play</div>
+	</div>
+	<div id="date_display_box"><div id="date_display">Hello World</div></div>
 {% endblock %}
 
 {% block scripts %}

@@ -70,29 +70,24 @@ function addMarkerListener(datamarker) {
 
 }
 
-function getMoreData(searchterm) {
-
-
-}
-
 function initialize() {
 
-	$.get('/sample', function (data) {
-	//	alert(data);	
+	$.get('/sample', function (data) {	
 		tweetarray = $.parseJSON(data);
 		for( var b=0; b < tweetarray.length; b++) {
 			var tweet = tweetarray[b];
 			var datamarker = new DataMarker(tweet.content, new google.maps.LatLng(tweet.latitude, tweet.longitude), tweet.time);
 		}
-	//	alert(tweetarray.length);
+		
+		reset_slider();
 	});
 	
-$("#searchform").submit(function() {	
+	$("#searchform").submit(function() {	
 		var searchterm = $('#search').val();
-		getMoreData(searchterm);
+		search(searchterm);
 		//e.preventDefault();
 		return false;
-});
+	});
 	var mapOptions = {
 		zoom : 2,
 		mapTypeId : google.maps.MapTypeId.TERRAIN,
@@ -105,30 +100,14 @@ $("#searchform").submit(function() {
 	map = new google.maps.Map(document.getElementById("map"), mapOptions);
 		
 	var center = map.getCenter();
-	for(i=0; i < 5; i++) {
-	  //  var someTmarker = new TweetMarker("Yo",new google.maps.LatLng(i*37, 0,false), "someTime");	
-	   imageSize = new google.maps.Size({height : 34,
-					width : 20
-				 	});
-	   markerImage = new google.maps.MarkerImage("media/images/pink_MarkerO.png");
-	   title = "Yo";
-		// Latlng cannot accept lat values more than 90 or less than -90
-	   datamarker = new DataMarker("Hello there!" , new google.maps.LatLng(0, i* 20, false), 1318717240 - 10000);
-		
-	  
-	  // new google.maps.Marker({position: new google.maps.LatLng(0, i*50, false), map : map, title : title, icon : markerImage});
-	    //addMarker(someTmarker);
-	}
-	//	addMarkerListener(datamarkerlist[0]);
-	//alert(datamarkerlist.length);
-        
+    
+    initialize_slider();
 }
 
 function search(searchText) {
-
-	//alert(searchText);
+	$("#titlebar_left").html(searchText);
+	
 	return false;
-
 }
 
 /*
@@ -147,9 +126,117 @@ function updateView() {
 
 	for( var b = 0; b < tweetmarkerlist.length; b++) {
 		tweetmarker[b].timestamp;
-		
-
 	}
+}
 
+/*
+	Slider stuff
+*/
+	
+function initialize_slider() {
+	$("#date_display_box").hide();
+	$("#slider").slider({
+		animate: true,
+     	range: "min",
+		value: 0,
+		min: 0,
+		max: 1,
+		step: 1,
 
+		start: function(event, ui) {
+			$("#date_display_box").fadeIn('fast');
+			$("#date_display").html(" ");
+		},
+		
+		stop: function(event, ui) {
+			$("#date_display_box").fadeOut('fast');
+			$("#date_display").html(" ");
+		},
+		
+		//this gets a live reading of the value and prints it on the page
+		slide: function(event, ui) {
+			$("#date_display").html(ui.value + parseInt(current_min_timestamp));
+			$.each(datamarkerlist, function(index, value) {
+				if (value.timestamp <= ui.value + parseInt(current_min_timestamp)) {
+					value.marker.setVisible(true)
+				} else {
+					value.marker.setVisible(false);
+				}
+			});
+		},
+
+		//this updates the hidden form field so we can submit the data using a form
+		change: function(event, ui) {
+			$.each(datamarkerlist, function(index, value) {
+				if (value.timestamp <= ui.value + parseInt(current_min_timestamp)) {
+					value.marker.setVisible(true)
+				} else {
+					value.marker.setVisible(false);
+				}
+			});
+		}
+	});
+	
+	reset_slider();
+}
+
+var current_min_timestamp = 1;
+
+function reset_slider() {
+	current_min_timestamp = getMinTimestamp();
+	var max_timestamp = getMaxTimestamp() - current_min_timestamp;
+	var min_timestamp = 0;
+	$("#slider").slider("option", "min", min_timestamp);
+	$("#slider").slider("option", "max", max_timestamp);
+	$("#slider").slider("option", "value", max_timestamp);
+}
+
+function getMinTimestamp() {
+	if (datamarkerlist.length > 0) {
+		return datamarkerlist.reduce(function(a, b) {if(a.timestamp < b.timestamp) return a; return b;}).timestamp;
+	}
+	return 0;
+}
+
+function getMaxTimestamp() {
+	if (datamarkerlist.length > 0) {
+		return datamarkerlist.reduce(function(a, b) {if(a.timestamp > b.timestamp) return a; return b;}).timestamp;
+	}
+	return 1;
+}
+
+/*
+	Replay Data
+*/
+var PLAY_LENGTH_DEFAULT = 30;
+var play_length = 0;
+var current_time = 0;
+var date_increase_amount = 1;
+
+function play() {
+	clearInterval("next_play_stage()");
+	current_time = 0;
+	
+	if (datamarkerlist.length < PLAY_LENGTH_DEFAULT) {
+		play_length = datamarkerlist.length
+	} else {
+		play_length = PLAY_LENGTH_DEFAULT;
+	}
+	
+	var max_timestamp = getMaxTimestamp();
+	var min_timestamp = getMinTimestamp();	
+	var difference = max_timestamp - min_timestamp;
+	date_increase_amount = difference / play_length;
+	
+	setInterval("next_play_stage()", 1000);
+}
+
+function next_play_stage() {
+	if (current_time > play_length) {
+		clearInterval("next_play_stage()");
+		return;
+	}
+	$('title').html(Math.floor(current_time * date_increase_amount));
+	$("#slider").slider("option", "value", Math.floor(current_time * date_increase_amount));
+	current_time += 1;
 }

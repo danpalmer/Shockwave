@@ -95,3 +95,72 @@
 	top:100%;
 	margin-top:-44px;
 }
+
+#slider {
+	margin:15px;
+	width:82%;
+	float:right;
+}
+
+.action_button {
+	position:inherit;
+	bottom:0px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #ffffff;
+	padding: 10px 20px;
+	background: -moz-linear-gradient(
+		top,
+		#6b6b6b 0%,
+		#000000);
+	background: -webkit-gradient(
+		linear, left top, left bottom, 
+		from(#6b6b6b),
+		to(#000000));
+	border-radius: 30px;
+	-moz-border-radius: 30px;
+	-webkit-border-radius: 30px;
+	border: 1px solid #000000;
+	-moz-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(255,255,255,0.7);
+	-webkit-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(255,255,255,0.7);
+	text-shadow:
+		0px -1px 0px rgba(000,000,000,0.4),
+		0px 1px 0px rgba(255,255,255,0.3);
+	z-index:20;
+	height:10px;
+	line-height:10px;
+	margin-left:10px;
+	margin-bottom:5px;
+	cursor:pointer;
+}
+
+.search_button {
+	height:30px;
+}
+
+#date_display_box {
+	position:absolute;
+	width:30%;
+	left:40%;
+	height:auto;
+	top:40%;
+	background-color:rgba(1,1,1,0.8);
+	-webkit-box-shadow:0px 0px 5px rgba(1,1,1,0.8);
+	z-index:5;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+#date_display {
+	color:white;
+	text-align:center;
+	z-index:6;
+	font-size:32px;
+	line-height:44px;
+	padding:10px;
+}
