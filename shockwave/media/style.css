@@ -1,6 +1,41 @@
+#content {
+	text-align:center;
+}
+
 #titlebar {
 	background-color:#d1d1d1;
 	height:44px;
+	border-bottom:1px solid rgba(1,1,1,0.8);
+	border-left:1px solid rgba(1,1,1,0.8);
+	border-right:1px solid rgba(1,1,1,0.8);
+	
+	background-image: linear-gradient(bottom, rgb(179,179,179) 23%, rgb(233,233,233) 81%);
+	background-image: -o-linear-gradient(bottom, rgb(179,179,179) 23%, rgb(233,233,233) 81%);
+	background-image: -moz-linear-gradient(bottom, rgb(179,179,179) 23%, rgb(233,233,233) 81%);
+	background-image: -webkit-linear-gradient(bottom, rgb(179,179,179) 23%, rgb(233,233,233) 81%);
+	background-image: -ms-linear-gradient(bottom, rgb(179,179,179) 23%, rgb(233,233,233) 81%);
+	
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.23, rgb(179,179,179)),
+		color-stop(0.81, rgb(233,233,233))
+	);
+	
+	-webkit-box-shadow:0px 0px 5px black;
+	
+	-webkit-border-bottom-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	
+	width:60%;
+	left:20%;
+	position:fixed;
+	z-index:1;
 }
 
 #titlebar_left,
@@ -16,4 +51,47 @@
 
 #titlebar_right {
 	float:right;
+}
+
+#map {
+	z-index:0;
+}
+
+#slider_container {
+	background-color:#d1d1d1;
+	height:44px;
+	border-top:1px solid rgba(1,1,1,0.8);
+	border-left:1px solid rgba(1,1,1,0.8);
+	border-right:1px solid rgba(1,1,1,0.8);
+	
+	background-image: linear-gradient(top, rgb(179,179,179) 23%, rgb(233,233,233) 81%);
+	background-image: -o-linear-gradient(top, rgb(179,179,179) 23%, rgb(233,233,233) 81%);
+	background-image: -moz-linear-gradient(top, rgb(179,179,179) 23%, rgb(233,233,233) 81%);
+	background-image: -webkit-linear-gradient(top, rgb(179,179,179) 23%, rgb(233,233,233) 81%);
+	background-image: -ms-linear-gradient(top, rgb(179,179,179) 23%, rgb(233,233,233) 81%);
+	
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.23, rgb(179,179,179)),
+		color-stop(0.81, rgb(233,233,233))
+	);
+	
+	-webkit-box-shadow:0px 0px 5px black;
+	
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-topright: 10px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	
+	width:60%;
+	left:20%;
+	position:fixed;
+	z-index:1;
+	
+	top:100%;
+	margin-top:-44px;
 }
