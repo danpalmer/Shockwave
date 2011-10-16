@@ -1,10 +1,10 @@
 import pycurl, json, urllib
-
+from twitter_formatter import format_twitter_status
 STREAM_URL = "https://stream.twitter.com/1/statuses/filter.json"
 USER = "shockwaves_test"
 PASS = "YoullNeverGuessTh1s!"
 
-KEYWORDS = "ThanksToMyEx"
+KEYWORDS = "apple, bieber, korean gp, new zealand vs australia, inschooltheresalways, ireallyhatewhenpeople, thankstomyex, happy birthday john and edward"
 
 class Client:
 	def __init__(self):
@@ -29,6 +29,9 @@ class Client:
 			self.buffer = ""
 			
 			if 'text' in content:
-				print content['text']
-
+				x = format_twitter_status(content)
+				if x:
+					print x
+				else:
+					print "-"
 client = Client()

@@ -1,7 +1,8 @@
 import json
+import time
 
 class DataPoint():
-	def __init__():
+	def __init__(self):
 		self.content = None
 		self.latitude = None
 		self.longitude = None
@@ -11,8 +12,7 @@ class DataPoint():
 	def json(self):
 		return json.dumps({
 			"content":self.content,
-			"latitude":'%s' % self.lat.to_eng_string(),
-			"longitude":'%s' % self.long.to_eng_string(),
-			"time":str(time.mktime(self.time.timetuple())),
-			"tags":self.tags
+			"latitude":self.latitude,
+			"longitude":self.longitude,
+			"time":str(time.mktime(self.time.timetuple()))
 		})

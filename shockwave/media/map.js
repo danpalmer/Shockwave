@@ -141,10 +141,35 @@ function search(searchText) {
 }
 
 function getStreamData(url) {
+	   // called on search
+    
+    ws = new WebSocket(url);
+    
+    // called every time a message is received
+    ws.onmessage = function(event) {
+        var json = $.parseJSON(event.data);
+        var datamarker = new DataMarker(json.content, new google.maps.LatLng(json.latitude, json.longitude), json.time);
+            // SAMPLE: append an <li> with the contents
+            //$('ul#content').append('<li>' + event.data + '</li>');
+    };
 
+        // called when server connection closes
+    ws.onclose = function(event) { 
+            // SAMPLE: append a div saying connection closed
+            $('content-holder').append('<div id="closed"><b>The server has disconnected you.</b></div>');
+        };
 
+        // called when server connection opened
+    ws.onopen = function(evt) { 
+            // SAMPLE: recolour login detail textboxes green
+    //$("#host").css("background", "green"); 
+    //$("#port").css("background", "green"); 
+    //$("#uri").css("background", "green");
 
+            $('#content-holder').css('opacity: 1.0');
+    };
 
+}
 }
 
 function getBatchData(url) {
