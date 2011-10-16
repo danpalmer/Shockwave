@@ -10,9 +10,9 @@ class DataPoint():
 	
 	def json(self):
 		return json.dumps({
-			"content":content,
-			"latitude":latitude,
-			"longitude":longitude,
-			"time":time,
-			"tags":tags
+			"content":self.content,
+			"latitude":'%s' % self.lat.to_eng_string(),
+			"longitude":'%s' % self.long.to_eng_string(),
+			"time":str(time.mktime(self.time.timetuple())),
+			"tags":self.tags
 		})

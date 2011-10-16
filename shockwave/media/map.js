@@ -122,10 +122,15 @@ function fitMapToMarkers() {
 function search(searchText) {
 	$("#titlebar_left").html(searchText);
 	
+	$.each(datamarkerlist, function(index, object) {
+		object.marker.setMap(null);
+	});
+	datamarkerlist = [];
+	
 	var searchurl = "/info/" + searchText;
 	$.get(searchurl, function(data) {
 		var info = $.parseJSON(data);
-		if(info.isStream == false) {
+		if(info.stream == "false") {
 			getBatchData(info.url);
 		} else {
 			getStreamData(info.url);
@@ -143,22 +148,14 @@ function getStreamData(url) {
 }
 
 function getBatchData(url) {
-
-
+	$.get("/dataset/glastonbury-2011", function(data) {
+		$.each(data, function(index, object) {
+			var datamarker = new DataMarker(object.content, new google.maps.LatLng(object.latitude, object.longitude), object.time);
+		});
+		reset_slider();
+	});
 }
 
-/*
-function addMarker(tweetmarker) {
-
-	marker = new google.maps.Marker({position: tweetmarker.pos,
-					 map : map,
-					 title: tweetmarker.message
-					});
-	data.marker = marker;	
-	tweetmarkerlist.push(tweetmarker);
-
-}
-*/
 function updateView() {
 
 	for( var b = 0; b < tweetmarkerlist.length; b++) {
@@ -318,7 +315,7 @@ function play() {
 	var difference = max_timestamp - min_timestamp;
 	date_increase_amount = difference / play_length;
 	
-	setInterval("next_play_stage()", 1000);
+	setInterval("next_play_stage()", 100);
 }
 
 function next_play_stage() {
