@@ -7,7 +7,7 @@ function DataMarker(message, latlng, timestamp) {
 	 this.marker = new google.maps.Marker({ position : this.latlng,
 						map : map,
 						title : content + " at " + timestamp,
-						icon : "/media/images/pink_MarkerO.png",
+						icon : "/media/images/TrackingDot0.png",
 						animation : google.maps.Animation.DROP
 					     });	
 	 this.content = message;
@@ -34,7 +34,7 @@ function formatDateNicely(unixtime) {
 	
 	if(morethanaday(unixtime, currentTime / 1000)) {
 		if(morethanaweek(unixtime / 1000, currentTime/1000)) {
-			return date.getDate() + "/" + date.getMonth() + "/" +  date.getYear();
+			return date.getDate() + "/" + date.getMonth() + date.getYear();
 		} else {
 			return date.getDay() + " " + date.getHours() + ":" + date.getMinutes();
 		}
@@ -104,10 +104,46 @@ function initialize() {
     initialize_slider();
 }
 
+function fitMapToMarkers() {
+	//alert(datamarkerlist.length);
+	if(datamarkerlist.length == 0) {
+		alert("datamarkerlist empty");
+
+	} else {
+		var bounds = new google.maps.LatLngBounds();
+		for(var b = 0; b < b.length; b++) {
+		
+			bounds.extend(datamarkerlist[b]);
+		}
+		map.fitBounds(bounds);
+	}
+}
 function search(searchText) {
 	$("#titlebar_left").html(searchText);
 	
+	var searchurl = "/info/" + searchText;
+	$.get(searchurl, function(data) {
+		var info = $.parseJSON(data);
+		if(info.isStream == false) {
+			getBatchData(info.url);
+		} else {
+			getStreamData(info.url);
+		}
+
+	});
 	return false;
+}
+
+function getStreamData(url) {
+
+
+
+
+}
+
+function getBatchData(url) {
+
+
 }
 
 /*
@@ -157,6 +193,8 @@ function initialize_slider() {
 		slide: function(event, ui) {
 			$("#date_display").html(ui.value + parseInt(current_min_timestamp));
 			$.each(datamarkerlist, function(index, value) {
+				
+					changeMarkerTransparency(datamarkerlist[index], ui.value + parseInt(getMinTimestamp()), getMaxTimestamp() - getMinTimestamp());
 				if (value.timestamp <= ui.value + parseInt(current_min_timestamp)) {
 					value.marker.setVisible(true)
 				} else {
@@ -168,16 +206,34 @@ function initialize_slider() {
 		//this updates the hidden form field so we can submit the data using a form
 		change: function(event, ui) {
 			$.each(datamarkerlist, function(index, value) {
+					
 				if (value.timestamp <= ui.value + parseInt(current_min_timestamp)) {
 					value.marker.setVisible(true)
 				} else {
 					value.marker.setVisible(false);
 				}
 			});
+			
+			//	fitMapToMarkers();
 		}
 	});
 	
 	reset_slider();
+}
+
+function changeMarkerTransparency(datamarker, current_timestamp, timeRange) {
+
+	console.log("the marker timestamp is %d", datamarker.timestamp);
+	console.log("the UI timestamp is %d", current_timestamp);
+	console.log("the timeRang is %d", timeRange);
+	console.log("the UI timestamp minus the timeRange is %d", current_timestamp
+	var alpha = getAlpha(datamarker.timestamp, current_timestamp, timeRange);	
+
+}
+
+function getAlpha(some_timestamp, current_timestamp, timeRange) {
+
+
 }
 
 var current_min_timestamp = 1;
