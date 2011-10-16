@@ -143,7 +143,7 @@ function search(searchText) {
 function getStreamData(url) {
 	   // called on search
     
-    ws = new WebSocket(url);
+    var ws = new WebSocket(url);
     
     // called every time a message is received
     ws.onmessage = function(event) {
