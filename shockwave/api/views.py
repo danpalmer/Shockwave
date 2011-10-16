@@ -7,7 +7,7 @@ def get_dataset_info(request, term):
 	dataset = Dataset.objects.filter(name=term)
 	
 	if not dataset:
-		return HttpResponse('{"url":"http://shockwave.dapl.me:8000/%s", "stream":"true"}' % term)
+		return HttpResponse('{"url":"ws://shockwave.dapl.me:8000/%s", "stream":"true"}' % term)
 	
 	return HttpResponse('{"url":"%s", "stream":"false"}' % ("http://odin.local/dataset/" + term))
 
